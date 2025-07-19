@@ -12,8 +12,14 @@ def is_valid_offer(offer, city, category, start_date, end_date):
         return False
     if category and offer.get("category", "").lower() != category.lower():
         return False
+
+    # Controlla che valid_from e valid_through siano presenti
+    if "valid_from" not in offer or "valid_through" not in offer:
+        return False
+
     valid_from = datetime.strptime(offer["valid_from"], "%Y-%m-%d")
     valid_through = datetime.strptime(offer["valid_through"], "%Y-%m-%d")
+
     if start_date and valid_through < start_date:
         return False
     if end_date and valid_from > end_date:
