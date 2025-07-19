@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template
 import json
 from datetime import datetime
 
@@ -6,9 +6,6 @@ app = Flask(__name__)
 
 with open("offerte_groupon_jsonld.json", "r") as f:
     data = json.load(f)
-
-with open("index.html", "r") as f:
-    template = f.read()
 
 def is_valid_offer(offer, city, category, start_date, end_date):
     if city and offer.get("city", "").lower() != city.lower():
@@ -32,7 +29,7 @@ def index():
     sd = datetime.strptime(start_date, "%Y-%m-%d") if start_date else None
     ed = datetime.strptime(end_date, "%Y-%m-%d") if end_date else None
     results = [d for d in data if is_valid_offer(d, city, category, sd, ed)]
-    return render_template_string(template, results=results)
+    return render_template("index.html", results=results)
 
 if __name__ == "__main__":
     app.run(debug=True)
