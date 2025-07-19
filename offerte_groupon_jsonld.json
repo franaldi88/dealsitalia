@@ -14,7 +14,8 @@
     "seller": {
       "@type": "LocalBusiness",
       "name": "Centro Benessere Relax"
-    }
+    },
+    "city": "Bologna"
   },
   {
     "@context": "https://schema.org",
@@ -31,7 +32,8 @@
     "seller": {
       "@type": "LocalBusiness",
       "name": "Ristorante Il Cuore"
-    }
+    },
+    "city": "Milano"
   },
   {
     "@context": "https://schema.org",
@@ -48,7 +50,8 @@
     "seller": {
       "@type": "LocalBusiness",
       "name": "Escape City"
-    }
+    },
+    "city": "Torino"
   },
   {
     "@context": "https://schema.org",
@@ -65,7 +68,8 @@
     "seller": {
       "@type": "LocalBusiness",
       "name": "Bike&Fun"
-    }
+    },
+    "city": "Milano"
   },
   {
     "@context": "https://schema.org",
@@ -82,7 +86,8 @@
     "seller": {
       "@type": "LocalBusiness",
       "name": "Yoga Libera"
-    }
+    },
+    "city": "Roma"
   },
   {
     "@context": "https://schema.org",
@@ -99,7 +104,8 @@
     "seller": {
       "@type": "LocalBusiness",
       "name": "Terme In Centro"
-    }
+    },
+    "city": "Firenze"
   },
   {
     "@context": "https://schema.org",
@@ -116,7 +122,8 @@
     "seller": {
       "@type": "LocalBusiness",
       "name": "Cucina e Tradizione"
-    }
+    },
+    "city": "Bologna"
   },
   {
     "@context": "https://schema.org",
@@ -133,7 +140,8 @@
     "seller": {
       "@type": "LocalBusiness",
       "name": "Ghost Walk Napoli"
-    }
+    },
+    "city": "Napoli"
   },
   {
     "@context": "https://schema.org",
@@ -150,7 +158,8 @@
     "seller": {
       "@type": "LocalBusiness",
       "name": "HairStyle Donna"
-    }
+    },
+    "city": "Torino"
   },
   {
     "@context": "https://schema.org",
@@ -167,6 +176,7 @@
     "seller": {
       "@type": "LocalBusiness",
       "name": "AdventureLand"
-    }
+    },
+    "city": "Verona"
   }
 ]
