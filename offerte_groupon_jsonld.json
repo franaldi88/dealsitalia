@@ -1,0 +1,172 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    "name": "Massaggio rilassante 60’",
+    "description": "Trattamento con oli essenziali a Bologna centro",
+    "category": "Wellness",
+    "priceCurrency": "EUR",
+    "price": "29.90",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2025-07-20",
+    "validThrough": "2025-07-21",
+    "url": "https://fake-groupon.com/deal/massaggio-bologna",
+    "seller": {
+      "@type": "LocalBusiness",
+      "name": "Centro Benessere Relax"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    "name": "Cena di coppia romantica",
+    "description": "Menù degustazione di 4 portate con vino incluso",
+    "category": "Dining",
+    "priceCurrency": "EUR",
+    "price": "59.90",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2025-07-20",
+    "validThrough": "2025-07-25",
+    "url": "https://fake-groupon.com/deal/cena-romantica-milano",
+    "seller": {
+      "@type": "LocalBusiness",
+      "name": "Ristorante Il Cuore"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    "name": "Escape Room per famiglie",
+    "description": "Sfida interattiva per bambini e adulti",
+    "category": "Activities",
+    "priceCurrency": "EUR",
+    "price": "39.90",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2025-07-21",
+    "validThrough": "2025-07-28",
+    "url": "https://fake-groupon.com/deal/escape-torino",
+    "seller": {
+      "@type": "LocalBusiness",
+      "name": "Escape City"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    "name": "Tour in bicicletta sul Naviglio",
+    "description": "Guida turistica e bici incluse per 2 ore",
+    "category": "Travel",
+    "priceCurrency": "EUR",
+    "price": "19.90",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2025-07-22",
+    "validThrough": "2025-07-27",
+    "url": "https://fake-groupon.com/deal/tour-naviglio",
+    "seller": {
+      "@type": "LocalBusiness",
+      "name": "Bike&Fun"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    "name": "Lezione di yoga all’aperto",
+    "description": "Sessione mattutina in parco cittadino",
+    "category": "Wellness",
+    "priceCurrency": "EUR",
+    "price": "14.90",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2025-07-20",
+    "validThrough": "2025-07-26",
+    "url": "https://fake-groupon.com/deal/yoga-roma",
+    "seller": {
+      "@type": "LocalBusiness",
+      "name": "Yoga Libera"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    "name": "Ingresso spa + tisana detox",
+    "description": "Accesso area benessere e relax 2 ore",
+    "category": "Wellness",
+    "priceCurrency": "EUR",
+    "price": "24.90",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2025-07-23",
+    "validThrough": "2025-07-30",
+    "url": "https://fake-groupon.com/deal/spa-firenze",
+    "seller": {
+      "@type": "LocalBusiness",
+      "name": "Terme In Centro"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    "name": "Lezione di cucina tipica emiliana",
+    "description": "Impara a preparare tagliatelle e tortellini",
+    "category": "Activities",
+    "priceCurrency": "EUR",
+    "price": "49.90",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2025-07-24",
+    "validThrough": "2025-07-27",
+    "url": "https://fake-groupon.com/deal/cucina-bologna",
+    "seller": {
+      "@type": "LocalBusiness",
+      "name": "Cucina e Tradizione"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    "name": "Tour notturno dei fantasmi",
+    "description": "Passeggiata guidata tra i misteri della città",
+    "category": "Activities",
+    "priceCurrency": "EUR",
+    "price": "17.90",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2025-07-21",
+    "validThrough": "2025-07-31",
+    "url": "https://fake-groupon.com/deal/ghost-tour-napoli",
+    "seller": {
+      "@type": "LocalBusiness",
+      "name": "Ghost Walk Napoli"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    "name": "Taglio e piega + trattamento",
+    "description": "Trattamento rigenerante incluso per capelli",
+    "category": "Beauty",
+    "priceCurrency": "EUR",
+    "price": "22.90",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2025-07-19",
+    "validThrough": "2025-07-25",
+    "url": "https://fake-groupon.com/deal/taglio-torino",
+    "seller": {
+      "@type": "LocalBusiness",
+      "name": "HairStyle Donna"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    "name": "Ingresso a parco avventura",
+    "description": "Percorsi sospesi tra gli alberi e zipline",
+    "category": "Activities",
+    "priceCurrency": "EUR",
+    "price": "27.90",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2025-07-20",
+    "validThrough": "2025-07-30",
+    "url": "https://fake-groupon.com/deal/parco-verona",
+    "seller": {
+      "@type": "LocalBusiness",
+      "name": "AdventureLand"
+    }
+  }
+]
