@@ -8,6 +8,7 @@
 <body class="bg-dark text-white">
   <div class="container mt-4">
     <h1 class="mb-4 text-center">Scopri le Migliori Offerte</h1>
+
     <form method="get" class="row g-3 mb-4" action="/">
       <div class="col-md-3">
         <label class="form-label">Città</label>
@@ -29,20 +30,23 @@
         <button type="submit" class="btn btn-primary">Cerca</button>
       </div>
     </form>
+
     {% if results %}
       <div class="row row-cols-1 row-cols-md-2 g-4">
         {% for offer in results %}
-        <div class="col">
-          <div class="card text-dark h-100">
-            <div class="card-body">
-              <h5 class="card-title">{{ offer.title }}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{ offer.category }} - {{ offer.city }}</h6>
-              <p class="card-text">{{ offer.description }}</p>
-              <p class="card-text"><strong>€{{ offer.price }}</strong> | {{ offer.merchant }}</p>
-              <p class="card-text"><small>Valido dal {{ offer.valid_from }} al {{ offer.valid_through }}</small></p>
+          <div class="col">
+            <div class="card text-dark h-100">
+              <div class="card-body">
+                <h5 class="card-title">{{ offer.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ offer.category }} – {{ offer.city }}</h6>
+                <p class="card-text">{{ offer.description }}</p>
+                <p class="card-text"><strong>€{{ offer.price }}</strong> | {{ offer.merchant }}</p>
+                <p class="card-text">
+                  <small>Valido dal {{ offer.valid_from }} al {{ offer.valid_through }}</small>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
         {% endfor %}
       </div>
     {% else %}
