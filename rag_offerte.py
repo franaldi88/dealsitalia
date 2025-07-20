@@ -15,15 +15,20 @@ MODEL = os.getenv("MODEL", "gpt-4")
 with open("offerte_groupon_jsonld.json", "r") as f:
     offerte = json.load(f)
 
-# 3. Trasforma ogni offerta in documento semantico
+# 3. Trasforma ogni offerta in documento semantico + metadata
 def offerta_to_doc(offer):
     return Document(
         page_content=(
             f"{offer['name']} - {offer['description']} | "
             f"{offer['category']}, {offer['city']} - €{offer['price']} "
-            f"({offer['validFrom']} → {offer['validThrough']}) da {offer['seller']['name']} "
-            f"[VALIDE_DAL:{offer['validFrom']}] [VALIDE_AL:{offer['validThrough']}]"
-        )
+            f"({offer['validFrom']} → {offer['validThrough']}) da {offer['seller']['name']}"
+        ),
+        metadata={
+            "city": offer.get("city"),
+            "category": offer.get("category"),
+            "validFrom": offer.get("validFrom"),
+            "validThrough": offer.get("validThrough"),
+        }
     )
 
 docs = [offerta_to_doc(o) for o in offerte]
@@ -35,5 +40,6 @@ db = FAISS.from_documents(docs, embedding)
 # 5. Motore RAG disponibile per altri script (es. app.py)
 qa = RetrievalQA.from_chain_type(
     llm=ChatOpenAI(model=MODEL),
+    chain_type="stuff",
     retriever=db.as_retriever()
 )
