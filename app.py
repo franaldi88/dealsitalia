@@ -51,19 +51,17 @@ def index():
         possible_cities = list(set(d["city"].lower() for d in data if "city" in d))
         query_city = next((c for c in possible_cities if c in query_lower), None)
 
+        # ✅ Applichiamo entrambi i filtri (se presenti)
         filtered_docs = [
-    d for d in data
-    if (not query_city or d.get("city", "").lower() == query_city)
-    and (not query_date or is_valid_offer_for_date(d, query_date))
-]
+            d for d in data
+            if (not query_city or d.get("city", "").lower() == query_city)
+            and (not query_date or is_valid_offer_for_date(d, query_date))
+        ]
 
-        # ✅ fai fare il RAG solo sui documenti filtrati
         answer = qa.invoke({"query": query, "input_documents": filtered_docs})["result"]
-
-        # ✅ e mostra le stesse offerte nella UI
         results = filtered_docs
     else:
-        # Filtro classico
+        # Filtro classico con parametri GET
         results = [d for d in data if
                    (not city or d.get("city", "").lower() == city.lower()) and
                    (not category or d.get("category", "").lower() == category.lower()) and
