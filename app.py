@@ -51,17 +51,17 @@ def index():
         possible_cities = list(set(d["city"].lower() for d in data if "city" in d))
         query_city = next((c for c in possible_cities if c in query_lower), None)
 
-        # ✅ Applichiamo entrambi i filtri (se presenti)
-        filtered_docs = [
-            d for d in data
-            if (not query_city or d.get("city", "").lower() == query_city)
-            and (not query_date or is_valid_offer_for_date(d, query_date))
-        ]
+        filtered_docs = data
 
-        answer = qa.invoke({"query": query, "input_documents": filtered_docs})["result"]
+        if query_date:
+            filtered_docs = [d for d in filtered_docs if is_valid_offer_for_date(d, query_date)]
+        if query_city:
+            filtered_docs = [d for d in filtered_docs if d.get("city", "").lower() == query_city]
+
+        # Mostra le stesse offerte nella UI
         results = filtered_docs
+        answer = qa.invoke({"query": query, "input_documents": filtered_docs})["result"]
     else:
-        # Filtro classico con parametri GET
         results = [d for d in data if
                    (not city or d.get("city", "").lower() == city.lower()) and
                    (not category or d.get("category", "").lower() == category.lower()) and
@@ -72,3 +72,4 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True)
+    
