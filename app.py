@@ -4,10 +4,7 @@ import dateparser
 from flask import Flask, request, render_template
 from datetime import datetime
 from dateparser.search import search_dates
-from langchain_core.documents import Document
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain_community.vectorstores import FAISS
-from langchain.chains import RetrievalQA
+from rag_offerte import qa, create_dynamic_qa  # Motore RAG importato
 
 app = Flask(__name__)
 
@@ -18,7 +15,11 @@ with open("offerte_groupon_jsonld.json", "r") as f:
 # Estrai la prima data comprensibile dalla query
 def estrai_data_da_query(query):
     try:
-        results = search_dates(query, languages=["it"])
+        results = search_dates(
+            query,
+            languages=["it"],
+            settings={"RELATIVE_BASE": datetime.now()}
+        )
         for _, parsed in results or []:
             if parsed:
                 return parsed.date()
@@ -49,42 +50,26 @@ def index():
     answer = None
 
     if query:
-        # Estrazione data e città
         query_date = estrai_data_da_query(query)
         query_lower = query.lower()
         possible_cities = list(set(d["city"].lower() for d in data if "city" in d))
         query_city = next((c for c in possible_cities if c in query_lower), None)
 
-        # Filtro documenti
-        filtered_offers = data
+        filtered_docs = data
+
         if query_date:
-            filtered_offers = [d for d in filtered_offers if is_valid_offer_for_date(d, query_date)]
+            filtered_docs = [d for d in filtered_docs if is_valid_offer_for_date(d, query_date)]
         if query_city:
-            filtered_offers = [d for d in filtered_offers if d.get("city", "").lower() == query_city]
+            filtered_docs = [d for d in filtered_docs if d.get("city", "").lower() == query_city]
 
-        # RAG su documenti filtrati
-        docs = [
-            Document(
-                page_content=f"{o['name']} - {o['description']} | {o['category']}, {o['city']} - €{o['price']} "
-                             f"({o['validFrom']} → {o['validThrough']}) da {o['seller']['name']}"
-            )
-            for o in filtered_offers
-        ]
+        # Fai RAG solo sui documenti filtrati
+        dynamic_qa = create_dynamic_qa(filtered_docs)
+        answer = dynamic_qa.invoke({"query": query})["result"]
 
-        embedding = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
-        db = FAISS.from_documents(docs, embedding)
-        retriever = db.as_retriever()
-
-        qa_temp = RetrievalQA.from_chain_type(
-            llm=ChatOpenAI(model=os.getenv("MODEL", "gpt-4")),
-            retriever=retriever
-        )
-
-        answer = qa_temp.run(query)
-        results = filtered_offers
-
+        # Mostra anche le stesse offerte in UI
+        results = filtered_docs
     else:
-        # Filtro classico da barra di ricerca
+        # Filtro classico da form
         results = [d for d in data if
                    (not city or d.get("city", "").lower() == city.lower()) and
                    (not category or d.get("category", "").lower() == category.lower()) and
@@ -94,4 +79,4 @@ def index():
     return render_template("index.html", results=results, answer=answer, query=query)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
