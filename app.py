@@ -45,7 +45,7 @@ def index():
     results = []
     answer = None
 
-     if query:
+    if query:
         query_date = estrai_data_da_query(query)
         query_lower = query.lower()
         possible_cities = list(set(d["city"].lower() for d in data if "city" in d))
