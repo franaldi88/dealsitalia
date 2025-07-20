@@ -39,7 +39,10 @@ def index():
     answer = None
 
     if query:
-        answer = qa.invoke(query)["result"]
+        # Aggiungiamo la data attuale al prompt per interpretare “oggi”
+        today = date.today().strftime("%Y-%m-%d")
+        prompt = f"Oggi è il {today}. {query}"
+        answer = qa.invoke(prompt)["result"]
     else:
         results = [d for d in data if is_valid_offer(d, city, category, sd, ed)]
 
