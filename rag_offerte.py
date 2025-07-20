@@ -1,15 +1,14 @@
 import os
 import json
 from dotenv import load_dotenv
-from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_community.vectorstores import FAISS
-from langchain_openai import ChatOpenAI
 from langchain.chains import RetrievalQA
 from langchain_core.documents import Document
 
 # 1. Carica variabili da .env
 load_dotenv()
-
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 MODEL = os.getenv("MODEL", "gpt-4")
 
 # 2. Carica il file offerte
@@ -29,7 +28,7 @@ def offerta_to_doc(offer):
 docs = [offerta_to_doc(o) for o in offerte]
 
 # 4. Embedding e indicizzazione
-embedding = OpenAIEmbeddings()
+embedding = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
 db = FAISS.from_documents(docs, embedding)
 
 # 5. Motore RAG disponibile per altri script (es. app.py)
