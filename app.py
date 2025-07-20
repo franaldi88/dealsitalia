@@ -58,15 +58,19 @@ def index():
         if query_city:
             filtered_docs = [d for d in filtered_docs if d.get("city", "").lower() == query_city]
 
-        results = filtered_docs
-
         if filtered_docs:
-            prompt = f"Rispondi alla seguente domanda usando solo le offerte fornite: {query}"
+            prompt = (
+                f"{query}\n"
+                f"Queste sono le offerte a tua disposizione. "
+                f"Se non trovi nulla, rispondi 'non ci sono offerte', altrimenti elenca quelle rilevanti:"
+            )
             answer = qa.invoke({"query": prompt, "input_documents": filtered_docs})["result"]
         else:
             answer = "Mi dispiace, non ho trovato offerte valide per la tua richiesta."
+
+        results = filtered_docs
+
     else:
-        # Filtro classico (GET)
         results = [d for d in data if
                    (not city or d.get("city", "").lower() == city.lower()) and
                    (not category or d.get("category", "").lower() == category.lower()) and
