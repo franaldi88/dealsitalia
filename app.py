@@ -47,16 +47,18 @@ def index():
 
     if query:
         query_date = estrai_data_da_query(query)
+        filtered_docs = data
 
         if query_date:
             filtered_docs = [d for d in data if is_valid_offer_for_date(d, query_date)]
-            if filtered_docs:
-                answer = qa.invoke({"query": query, "input_documents": filtered_docs})["result"]
-            else:
-                answer = f"Nessuna offerta trovata per il {query_date.strftime('%d %B %Y')}."
-        else:
-            answer = qa.invoke(query)["result"]
+
+        # ⬇️ Mostriamo le offerte anche sotto (non solo risposta AI)
+        results = filtered_docs
+
+        # ⬇️ Risposta linguaggio naturale
+        answer = qa.invoke({"query": query, "input_documents": filtered_docs})["result"]
     else:
+        # Filtro classico
         results = [d for d in data if
                    (not city or d.get("city", "").lower() == city.lower()) and
                    (not category or d.get("category", "").lower() == category.lower()) and
