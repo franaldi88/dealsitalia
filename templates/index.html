@@ -9,6 +9,22 @@
   <div class="container mt-4">
     <h1 class="mb-4 text-center">Scopri le Migliori Offerte</h1>
 
+    <!-- 🔍 Query in linguaggio naturale -->
+    <form method="post" action="/" class="mb-4">
+      <div class="input-group">
+        <input type="text" name="query" class="form-control" placeholder="Es. Cosa posso fare a Milano questo weekend?" />
+        <button type="submit" class="btn btn-success">Chiedi</button>
+      </div>
+    </form>
+
+    <!-- 💬 Risposta AI -->
+    {% if answer %}
+      <div class="alert alert-info text-center">
+        <strong>Risposta AI:</strong><br>{{ answer }}
+      </div>
+    {% endif %}
+
+    <!-- 🎯 Filtro classico -->
     <form method="get" class="row g-3 mb-4" action="/">
       <div class="col-md-3">
         <label class="form-label">Città</label>
@@ -31,6 +47,7 @@
       </div>
     </form>
 
+    <!-- 📦 Offerte trovate -->
     {% if results %}
       <div class="row row-cols-1 row-cols-md-2 g-4">
         {% for offer in results %}
@@ -42,7 +59,7 @@
                 <p class="card-text">{{ offer.description }}</p>
                 <p class="card-text"><strong>€{{ offer.price }}</strong> | {{ offer.merchant }}</p>
                 <p class="card-text">
-                  <small>Valido dal {{ offer.valid_from }} al {{ offer.valid_through }}</small>
+                  <small>Valido dal {{ offer.validFrom }} al {{ offer.validThrough }}</small>
                 </p>
               </div>
             </div>
