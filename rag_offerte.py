@@ -21,7 +21,8 @@ def offerta_to_doc(offer):
         page_content=(
             f"{offer['name']} - {offer['description']} | "
             f"{offer['category']}, {offer['city']} - €{offer['price']} "
-            f"({offer['validFrom']} → {offer['validThrough']}) da {offer['seller']['name']}"
+            f"({offer['validFrom']} → {offer['validThrough']}) da {offer['seller']['name']} "
+            f"[VALIDE_DAL:{offer['validFrom']}] [VALIDE_AL:{offer['validThrough']}]"
         )
     )
 
