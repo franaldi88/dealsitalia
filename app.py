@@ -45,18 +45,24 @@ def index():
     results = []
     answer = None
 
-    if query:
+     if query:
         query_date = estrai_data_da_query(query)
+        query_lower = query.lower()
+        possible_cities = list(set(d["city"].lower() for d in data if "city" in d))
+        query_city = next((c for c in possible_cities if c in query_lower), None)
+
         filtered_docs = data
 
         if query_date:
-            filtered_docs = [d for d in data if is_valid_offer_for_date(d, query_date)]
+            filtered_docs = [d for d in filtered_docs if is_valid_offer_for_date(d, query_date)]
+        if query_city:
+            filtered_docs = [d for d in filtered_docs if d.get("city", "").lower() == query_city]
 
-        # ⬇️ Mostriamo le offerte anche sotto (non solo risposta AI)
-        results = filtered_docs
-
-        # ⬇️ Risposta linguaggio naturale
+        # ✅ fai fare il RAG solo sui documenti filtrati
         answer = qa.invoke({"query": query, "input_documents": filtered_docs})["result"]
+
+        # ✅ e mostra le stesse offerte nella UI
+        results = filtered_docs
     else:
         # Filtro classico
         results = [d for d in data if
