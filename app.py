@@ -1,8 +1,10 @@
-from flask import Flask, request, render_template
+import os
 import json
+import dateparser
+from flask import Flask, request, render_template
 from datetime import datetime, date
-from rag_offerte import qa
 from dateparser.search import search_dates
+from rag_offerte import qa  # Motore RAG importato
 
 app = Flask(__name__)
 
@@ -10,8 +12,7 @@ app = Flask(__name__)
 with open("offerte_groupon_jsonld.json", "r") as f:
     data = json.load(f)
 
-# Funzione di parsing date da testo
-
+# Estrai la prima data comprensibile dalla query
 def estrai_data_da_query(query):
     try:
         results = search_dates(query, languages=["it"])
@@ -19,11 +20,10 @@ def estrai_data_da_query(query):
             if parsed:
                 return parsed.date()
     except Exception:
-        return None
+        pass
     return None
 
-# Funzione di filtraggio
-
+# Verifica se un'offerta è valida per una certa data
 def is_valid_offer_for_date(offer, target_date):
     if "validFrom" not in offer or "validThrough" not in offer:
         return False
@@ -47,11 +47,15 @@ def index():
 
     if query:
         query_date = estrai_data_da_query(query)
-        print(f"Query: {query} → Data rilevata: {query_date}")
-        filtered_docs = data
+
         if query_date:
             filtered_docs = [d for d in data if is_valid_offer_for_date(d, query_date)]
-        answer = qa.invoke({"query": query, "input_documents": filtered_docs})["result"]
+            if filtered_docs:
+                answer = qa.invoke({"query": query, "input_documents": filtered_docs})["result"]
+            else:
+                answer = f"Nessuna offerta trovata per il {query_date.strftime('%d %B %Y')}."
+        else:
+            answer = qa.invoke(query)["result"]
     else:
         results = [d for d in data if
                    (not city or d.get("city", "").lower() == city.lower()) and
