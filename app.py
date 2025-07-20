@@ -1,24 +1,15 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import json
 from datetime import datetime
-import os
-
-from langchain_community.embeddings import OpenAIEmbeddings
-from langchain_community.vectorstores import FAISS
-from langchain_openai import ChatOpenAI
-from langchain.chains import RetrievalQA
-from langchain.docstore.document import Document
-from dotenv import load_dotenv
-
-load_dotenv()
+from rag_offerte import qa  # Usa l’istanza qa già pronta dal tuo script
 
 app = Flask(__name__)
 
-# Carica dati JSON
+# Carica le offerte
 with open("offerte_groupon_jsonld.json", "r") as f:
-    raw_data = json.load(f)
+    data = json.load(f)
 
-# Funzione di filtro classico
+# Filtraggio per città, categoria e date
 def is_valid_offer(offer, city, category, start_date, end_date):
     if city and offer.get("city", "").lower() != city.lower():
         return False
@@ -34,7 +25,6 @@ def is_valid_offer(offer, city, category, start_date, end_date):
         return False
     return True
 
-# Homepage con filtri classici
 @app.route("/", methods=["GET"])
 def index():
     city = request.args.get("city", "")
@@ -43,32 +33,17 @@ def index():
     end_date = request.args.get("end_date", "")
     sd = datetime.strptime(start_date, "%Y-%m-%d") if start_date else None
     ed = datetime.strptime(end_date, "%Y-%m-%d") if end_date else None
-    results = [d for d in raw_data if is_valid_offer(d, city, category, sd, ed)]
+    results = [d for d in data if is_valid_offer(d, city, category, sd, ed)]
     return render_template("index.html", results=results)
 
-# Route /ask per linguaggio naturale
-@app.route("/ask", methods=["GET"])
+# 🔍 Linguaggio naturale
+@app.route("/ask", methods=["POST"])
 def ask():
-    query = request.args.get("q", "")
-    if not query:
-        return "Fornisci una domanda con ?q=...", 400
-
-    # Prepara documenti da JSON
-    def json_to_doc(o):
-        return Document(
-            page_content=f"""{o["name"]} - {o["description"]} | {o["category"]}, {o["city"]} - €{o["price"]} ({o["validFrom"]} → {o["validThrough"]}) da {o["seller"]["name"]}""",
-            metadata=o
-        )
-
-    docs = [json_to_doc(o) for o in raw_data]
-    embeddings = OpenAIEmbeddings()
-    db = FAISS.from_documents(docs, embeddings)
-    retriever = db.as_retriever()
-    llm = ChatOpenAI(model="gpt-3.5-turbo")
-    qa = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
-
-    risposta = qa.run(query)
-    return risposta
+    user_query = request.form.get("query", "")
+    if not user_query:
+        return jsonify({"error": "Nessuna query fornita"}), 400
+    answer = qa.run(user_query)
+    return jsonify({"query": user_query, "answer": answer})
 
 if __name__ == "__main__":
     app.run(debug=True)
