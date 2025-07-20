@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template
 import json
-from datetime import datetime
+from datetime import datetime, date
 from rag_offerte import qa  # motore RAG da rag_offerte.py
 
 app = Flask(__name__)
