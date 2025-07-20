@@ -2,7 +2,7 @@ import os
 import json
 import dateparser
 from flask import Flask, request, render_template
-from datetime import datetime, date
+from datetime import datetime
 from dateparser.search import search_dates
 from rag_offerte import qa  # Motore RAG importato
 
@@ -15,7 +15,11 @@ with open("offerte_groupon_jsonld.json", "r") as f:
 # Estrai la prima data comprensibile dalla query
 def estrai_data_da_query(query):
     try:
-        results = search_dates(query, languages=["it"])
+        results = search_dates(
+            query,
+            languages=["it"],
+            settings={"RELATIVE_BASE": datetime.now()}
+        )
         for _, parsed in results or []:
             if parsed:
                 return parsed.date()
@@ -58,19 +62,13 @@ def index():
         if query_city:
             filtered_docs = [d for d in filtered_docs if d.get("city", "").lower() == query_city]
 
-        if filtered_docs:
-            prompt = (
-                f"{query}\n"
-                f"Queste sono le offerte a tua disposizione. "
-                f"Se non trovi nulla, rispondi 'non ci sono offerte', altrimenti elenca quelle rilevanti:"
-            )
-            answer = qa.invoke({"query": prompt, "input_documents": filtered_docs})["result"]
-        else:
-            answer = "Mi dispiace, non ho trovato offerte valide per la tua richiesta."
+        # Fai RAG solo sui documenti filtrati
+        answer = qa.invoke({"query": query, "input_documents": filtered_docs})["result"]
 
+        # Mostra anche le stesse offerte in UI
         results = filtered_docs
-
     else:
+        # Filtro classico da form
         results = [d for d in data if
                    (not city or d.get("city", "").lower() == city.lower()) and
                    (not category or d.get("category", "").lower() == category.lower()) and
